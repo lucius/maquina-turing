@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iterator>
+#include <map>
 
 #include "../userIncludes/LogErros.h"
 #include "../userIncludes/ParserMaquina.h"
@@ -62,6 +63,12 @@ ParserMaquina::leArquivo( )
 	this->arquivo >> _buffer;
 
 	this->parseiaOctupla( _buffer );
+
+	while( this->arquivo.good() )
+	{
+		this->arquivo >> _buffer;
+		this->parseiaTransicoes( _buffer );		
+	}
 }
 
 void
@@ -131,6 +138,41 @@ ParserMaquina::removeChaves( std::string* _buffer )
 	return _retornoSemChaves;
 }
 
+void
+ParserMaquina::parseiaTransicoes( std::string _buffer )
+{
+	StructTransicoes
+	_auxiliarInsercao;
+
+	size_t
+	_limiteSuperiorCorte;
+
+	_buffer = _buffer.substr( _buffer.find_first_of('(')+1 );
+
+	_limiteSuperiorCorte = _buffer.find_first_of(',');
+	_auxiliarInsercao.estadoOrigem = _buffer.substr( 0, _limiteSuperiorCorte );
+	_buffer = _buffer.substr( _limiteSuperiorCorte+1 );
+
+	_limiteSuperiorCorte = _buffer.find_first_of(')');
+	_auxiliarInsercao.simboloLido = _buffer.substr( 0, _limiteSuperiorCorte ).at( 0 );
+	_limiteSuperiorCorte = _buffer.find_first_of('[')+1;
+	_buffer = _buffer.substr( _limiteSuperiorCorte );
+
+	_limiteSuperiorCorte = _buffer.find_first_of(',');
+	_auxiliarInsercao.estadoDestino = _buffer.substr( 0, _limiteSuperiorCorte );
+	_buffer = _buffer.substr( _limiteSuperiorCorte+1 );
+
+	_limiteSuperiorCorte = _buffer.find_first_of(',');
+	_auxiliarInsercao.simboloEscrito = _buffer.substr( 0, _limiteSuperiorCorte ).at( 0 );
+	_buffer = _buffer.substr( _limiteSuperiorCorte+1 );
+
+	_limiteSuperiorCorte = _buffer.find_first_of(']');
+	_auxiliarInsercao.direcaoCabecote = _buffer.substr( 0, _limiteSuperiorCorte ).at( 0 );
+
+	this->maquina.funcoesTransicao.insert( std::pair<std::string,StructTransicoes>
+										   (_auxiliarInsercao.estadoOrigem, _auxiliarInsercao) );
+}
+
 std::vector<char>
 ParserMaquina::removeVirgulaChar( std::string _buffer )
 {
@@ -154,7 +196,6 @@ ParserMaquina::removeVirgulaChar( std::string _buffer )
 			_vectorRetorno.push_back( _substring.at(0) );
 			_buffer.clear( );
 		}
-		std::cout << _vectorRetorno.back();
 	}
 	return _vectorRetorno;
 }
@@ -182,7 +223,6 @@ ParserMaquina::removeVirgulaStr( std::string _buffer )
 			_vectorRetorno.push_back( _substring );
 			_buffer.clear( );
 		}
-		std::cout << _vectorRetorno.back();
 	}
 	return _vectorRetorno;
 }
