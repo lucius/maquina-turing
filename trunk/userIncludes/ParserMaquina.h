@@ -37,7 +37,7 @@ class ParserMaquina
 		parseiaOctupla( std::string );
 
 		void
-		parseiaTransicoes( );
+		parseiaTransicoes( std::string );
 
 		std::string
 		removeChaves( std::string* );
