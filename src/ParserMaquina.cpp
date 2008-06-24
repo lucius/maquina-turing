@@ -23,6 +23,12 @@ ParserMaquina::~ParserMaquina( )
 	//LogErros::getInstancia().getLog();
 }
 
+StructMaquina
+ParserMaquina::getMaquina( )
+{
+	return this->maquina;
+}
+
 bool
 ParserMaquina::carregaArquivo( std::string caminhoArquivo )
 {
