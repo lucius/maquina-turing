@@ -18,6 +18,9 @@ class ParserMaquina
 
 		~ParserMaquina( );
 
+		StructMaquina
+		getMaquina( );
+
 	protected:
 
 	private:
