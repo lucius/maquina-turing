@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "../userIncludes/MaquinaFita.h"
 #include "../userIncludes/ParserMaquina.h"
 #include "../userIncludes/LogErros.h"
 

@@ -61,11 +61,11 @@ ParserMaquina::leArquivo( )
 
 	this->arquivo >> _buffer;
 
-	this->parseiaOctupla( _buffer, &maquinaTuring );
+	this->parseiaOctupla( _buffer );
 }
 
 void
-ParserMaquina::parseiaOctupla( std::string _buffer, StructMaquina* maquinaTuring )
+ParserMaquina::parseiaOctupla( std::string _buffer)
 {
 	std::string
 	_alfabetoEntrada;
@@ -89,27 +89,100 @@ ParserMaquina::parseiaOctupla( std::string _buffer, StructMaquina* maquinaTuring
 	_caractereBranco;
 
 	std::string
-	_inicioFita;
+	_caractereInicioFita;
 
+
+	_alfabetoEntrada = this->removeChaves( &_buffer );
+	_conjuntoEstados = this->removeChaves( &_buffer );
+	_funcoesTransicao = this->removeChaves( &_buffer );
+	_estadoInicial = this->removeChaves( &_buffer );
+	_estadosFinais = this->removeChaves( &_buffer );
+	_alfabetoFita = this->removeChaves( &_buffer );
+	_caractereBranco = this->removeChaves( &_buffer );
+	_caractereInicioFita = this->removeChaves( &_buffer );
+
+	this->maquina.alfabetoEntrada = this->removeVirgulaChar( _alfabetoEntrada );
+	this->maquina.conjuntoEstados = this->removeVirgulaStr( _conjuntoEstados );
+	this->maquina.estadoInicial = _estadoInicial;
+	this->maquina.estadosFinais = this->removeVirgulaStr( _estadosFinais );
+	this->maquina.alfabetoFita = this->removeVirgulaChar( _alfabetoFita );
+	this->maquina.caractereBranco = _caractereBranco.at( 0 );
+	this->maquina.caractereInicioFita = _caractereInicioFita.at( 0 );
+}
+
+std::string
+ParserMaquina::removeChaves( std::string* _buffer )
+{
 	size_t
 	posicaoInicialCorte;
 
 	size_t
 	tamanhoCorte;
 
+	std::string
+	_retornoSemChaves;
 
-	posicaoInicialCorte = _buffer.find_first_of('{')+1;
-	tamanhoCorte = _buffer.find_first_of('}')-posicaoInicialCorte;
-	_alfabetoEntrada = _buffer.substr( posicaoInicialCorte, tamanhoCorte );
+	posicaoInicialCorte = _buffer->find_first_of('{')+1;
+	tamanhoCorte = _buffer->find_first_of('}')-posicaoInicialCorte;
+	_retornoSemChaves = _buffer->substr( posicaoInicialCorte, tamanhoCorte );
 
-	_buffer = _buffer.substr ( _buffer.find_first_of('}')+1 );
+	*_buffer = _buffer->substr ( _buffer->find_first_of('}')+1 );
 
-	posicaoInicialCorte = _buffer.find_first_of('{')+1;
-	tamanhoCorte = _buffer.find_first_of('}')-posicaoInicialCorte;
-	_conjuntoEstados = _buffer.substr( posicaoInicialCorte, tamanhoCorte );
+	return _retornoSemChaves;
+}
+
+std::vector<char>
+ParserMaquina::removeVirgulaChar( std::string _buffer )
+{
+	std::vector<char>
+	_vectorRetorno;
+
+	std::string
+	_substring;
 	
-	std::cout << _alfabetoEntrada;
-	std::cout << _conjuntoEstados;
+	while( !_buffer.empty() )
+	{
+		if( _buffer.find_first_of(',') != std::string::npos )
+		{
+			_substring = _buffer.substr( 0, _buffer.find_first_of(',') );
+			_vectorRetorno.push_back( _substring.at(0) );
+			_buffer = _buffer.substr( _buffer.find_first_of(',')+1 );
+		}
+		else
+		{
+			_substring = _buffer;
+			_vectorRetorno.push_back( _substring.at(0) );
+			_buffer.clear( );
+		}
+		std::cout << _vectorRetorno.back();
+	}
+	return _vectorRetorno;
+}
 
-	//std::cout << _buffer;
+std::vector<std::string>
+ParserMaquina::removeVirgulaStr( std::string _buffer )
+{
+	std::vector<std::string>
+	_vectorRetorno;
+
+	std::string
+	_substring;
+	
+	while( !_buffer.empty() )
+	{
+		if( _buffer.find_first_of(',') != std::string::npos )
+		{
+			_substring = _buffer.substr( 0, _buffer.find_first_of(',') );
+			_vectorRetorno.push_back( _substring );
+			_buffer = _buffer.substr( _buffer.find_first_of(',')+1 );
+		}
+		else
+		{
+			_substring = _buffer;
+			_vectorRetorno.push_back( _substring );
+			_buffer.clear( );
+		}
+		std::cout << _vectorRetorno.back();
+	}
+	return _vectorRetorno;
 }
