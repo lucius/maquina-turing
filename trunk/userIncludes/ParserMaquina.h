@@ -24,8 +24,8 @@ class ParserMaquina
 		std::ifstream
 		arquivo;
 
-		std::multimap<std::string,StructTransicoes>
-		transicoes;
+		StructMaquina
+		maquina;
 
 		bool
 		carregaArquivo( std::string );
@@ -34,10 +34,19 @@ class ParserMaquina
 		leArquivo( );
 
 		void
-		parseiaOctupla( std::string, StructMaquina* );
+		parseiaOctupla( std::string );
 
 		void
 		parseiaTransicoes( );
+
+		std::string
+		removeChaves( std::string* );
+
+		std::vector<char>
+		removeVirgulaChar( std::string );
+
+		std::vector<std::string>
+		removeVirgulaStr( std::string );
 };
 
 #endif /*PARSERMAQUINA_H_*/

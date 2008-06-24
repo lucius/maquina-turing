@@ -15,7 +15,7 @@ typedef struct StructTransicoes
 	char
 	simboloEscrito;
 
-	bool
+	char
 	direcaoCabecote;
 };
 
