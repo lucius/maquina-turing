@@ -58,22 +58,24 @@ ParserMaquina::leArquivo( )
 
 	StructMaquina
 	maquinaTuring;
-	
+
 	this->arquivo >> _buffer;
 
 	if( !_buffer.find_first_of('#') )
 	{
 		_buffer.clear( );
 	}
-
-	this->arquivo >> _buffer;
+	else
+	{
+		this->arquivo >> _buffer;
+	}
 
 	this->parseiaOctupla( _buffer );
 
 	while( this->arquivo.good() )
 	{
 		this->arquivo >> _buffer;
-		this->parseiaTransicoes( _buffer );		
+		this->parseiaTransicoes( _buffer );
 	}
 }
 
@@ -187,7 +189,7 @@ ParserMaquina::removeVirgulaChar( std::string _buffer )
 
 	std::string
 	_substring;
-	
+
 	while( !_buffer.empty() )
 	{
 		if( _buffer.find_first_of(',') != std::string::npos )
@@ -214,7 +216,7 @@ ParserMaquina::removeVirgulaStr( std::string _buffer )
 
 	std::string
 	_substring;
-	
+
 	while( !_buffer.empty() )
 	{
 		if( _buffer.find_first_of(',') != std::string::npos )
